@@ -24,7 +24,10 @@ public class JsonDeserializerVsJsonDocument
     }
 
     [Benchmark]
-    public SendMailDto RawText()
+    public SendMailDto RawText() => JsonSerializer.Deserialize<SendMailDto>(JsonText);
+
+    [Benchmark]
+    public SendMailDto RawTextValidate()
     {
         NSchema.Validate(JsonText);
         return JsonSerializer.Deserialize<SendMailDto>(JsonText);
@@ -36,13 +39,31 @@ public class JsonDeserializerVsJsonDocument
     {
         var doc = JsonDocument.Parse(JsonText.AsMemory());
 
+        return JsonSerializer.Deserialize<SendMailDto>(doc.RootElement);
+    }
+
+    [Benchmark]
+    public SendMailDto JsonDocumenterValidate()
+    {
+        var doc = JsonDocument.Parse(JsonText.AsMemory());
+
         DtoSchema.Validate(doc.RootElement);
 
         return JsonSerializer.Deserialize<SendMailDto>(doc.RootElement);
     }
 
+
+
     [Benchmark]
     public SendMailDto JsonDocumenterRawText()
+    {
+        var doc = JsonDocument.Parse(JsonText.AsMemory());
+
+        return JsonSerializer.Deserialize<SendMailDto>(doc.RootElement.GetRawText());
+    }
+
+    [Benchmark]
+    public SendMailDto JsonDocumenterRawTextValidate()
     {
         var doc = JsonDocument.Parse(JsonText.AsMemory());
 
@@ -54,6 +75,15 @@ public class JsonDeserializerVsJsonDocument
     [Benchmark(Baseline = true)]
     public SendMailDto JsonDeserializer()
     {
+        var dto = JsonSerializer.Deserialize<SendMailDto>(JsonText);
+        var text = JsonSerializer.Serialize(dto);
+
+        return JsonSerializer.Deserialize<SendMailDto>(text);
+    }
+
+    [Benchmark(Baseline = true)]
+    public SendMailDto JsonDeserializerValidate()
+    {
         NSchema.Validate(JsonText);
 
         var dto = JsonSerializer.Deserialize<SendMailDto>(JsonText);
@@ -62,5 +92,5 @@ public class JsonDeserializerVsJsonDocument
         return JsonSerializer.Deserialize<SendMailDto>(text);
     }
 
-   
+
 }
