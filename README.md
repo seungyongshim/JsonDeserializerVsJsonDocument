@@ -1,8 +1,12 @@
 ![CI](../../workflows/CI/badge.svg)
 
-|                Method |     Mean |     Error |    StdDev |   Median | Ratio | RatioSD |
-|---------------------- |---------:|----------:|----------:|---------:|------:|--------:|
-|               RawText | 1.753 ms | 0.0739 ms | 0.2179 ms | 1.837 ms |  0.39 |    0.03 |
-|        JsonDocumenter | 1.554 ms | 0.0298 ms | 0.0331 ms | 1.559 ms |  0.41 |    0.01 |
-| JsonDocumenterRawText | 3.774 ms | 0.2630 ms | 0.7461 ms | 3.484 ms |  0.90 |    0.20 |
-|      JsonDeserializer | 3.837 ms | 0.0638 ms | 0.0597 ms | 3.823 ms |  1.00 |    0.00 |
+|                        Method |      Mean |     Error |    StdDev | Ratio | RatioSD |
+|------------------------------ |----------:|----------:|----------:|------:|--------:|
+|                       RawText |  2.043 ms | 0.0737 ms | 0.2174 ms |  0.38 |    0.05 |
+|               RawTextValidate | 20.451 ms | 0.4056 ms | 0.6664 ms |  3.89 |    0.36 |
+|                JsonDocumenter |  2.374 ms | 0.0507 ms | 0.1486 ms |  0.44 |    0.04 |
+|        JsonDocumenterValidate |  2.818 ms | 0.0558 ms | 0.1101 ms |  0.53 |    0.04 |
+|         JsonDocumenterRawText |  4.540 ms | 0.1185 ms | 0.3437 ms |  0.84 |    0.09 |
+| JsonDocumenterRawTextValidate |  4.550 ms | 0.1094 ms | 0.3208 ms |  0.84 |    0.08 |
+|              JsonDeserializer |  5.473 ms | 0.1246 ms | 0.3675 ms |  1.00 |    0.00 |
+|      JsonDeserializerValidate | 24.514 ms | 0.4748 ms | 0.7107 ms |  4.65 |    0.49 |
