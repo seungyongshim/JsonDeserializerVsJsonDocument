@@ -81,7 +81,7 @@ public class JsonDeserializerVsJsonDocument
         return JsonSerializer.Deserialize<SendMailDto>(text);
     }
 
-    [Benchmark2]
+    [Benchmark]
     public SendMailDto JsonDeserializerValidate()
     {
         NSchema.Validate(JsonText);
