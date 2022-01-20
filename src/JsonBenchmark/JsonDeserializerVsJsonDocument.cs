@@ -14,13 +14,11 @@ public class JsonDeserializerVsJsonDocument
     }
 
     [Benchmark]
-    public SendMailDto JsonDeserializer()
+    public SendMailDto RawText()
     {
-        var dto = JsonSerializer.Deserialize<SendMailDto>(JsonText);
-        var text = JsonSerializer.Serialize(dto);
-
-        return JsonSerializer.Deserialize<SendMailDto>(text);
+        return JsonSerializer.Deserialize<SendMailDto>(JsonText);
     }
+
 
     [Benchmark]
     public SendMailDto JsonDocumenter()
@@ -29,4 +27,15 @@ public class JsonDeserializerVsJsonDocument
 
         return JsonSerializer.Deserialize<SendMailDto>(doc.RootElement.GetRawText());
     }
+
+    [Benchmark]
+    public SendMailDto JsonDeserializer()
+    {
+        var dto = JsonSerializer.Deserialize<SendMailDto>(JsonText);
+        var text = JsonSerializer.Serialize(dto);
+
+        return JsonSerializer.Deserialize<SendMailDto>(text);
+    }
+
+   
 }
