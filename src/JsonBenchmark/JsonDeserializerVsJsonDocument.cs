@@ -34,7 +34,7 @@ public class JsonDeserializerVsJsonDocument
     public SendMailDto JsonDeserializer()
     {
         var dto = JsonSerializer.Deserialize<SendMailDto>(JsonText);
-        var text = JsonSerializer.Serialize(dto);
+        var text = JsonSerializer.Serialize(dto with { From = new MailAddress("1", "111@111.111")});
 
         return JsonSerializer.Deserialize<SendMailDto>(text);
     }
