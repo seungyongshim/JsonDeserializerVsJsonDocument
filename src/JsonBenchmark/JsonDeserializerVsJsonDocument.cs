@@ -30,7 +30,7 @@ public class JsonDeserializerVsJsonDocument
         return JsonSerializer.Deserialize<SendMailDto>(doc.RootElement.GetRawText());
     }
 
-    [Benchmark]
+    [Benchmark(Baseline = true)]
     public SendMailDto JsonDeserializer()
     {
         var dto = JsonSerializer.Deserialize<SendMailDto>(JsonText);
