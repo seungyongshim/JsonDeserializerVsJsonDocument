@@ -3,9 +3,11 @@ using BenchmarkDotNet.Attributes;
 using JsonBenchmark;
 using JsonBenchmark.Properties;
 
+[HtmlExporter]
 public class JsonDeserializerVsJsonDocument
 {
     public string JsonText { get; private set; }
+    public MemoryStream MemoryStream { get; private set; }
 
     [GlobalSetup]
     public void Setuo()
@@ -23,7 +25,7 @@ public class JsonDeserializerVsJsonDocument
     [Benchmark]
     public SendMailDto JsonDocumenter()
     {
-        var doc = JsonDocument.Parse(JsonText);
+        var doc = JsonDocument.Parse(JsonText.AsMemory());
 
         return JsonSerializer.Deserialize<SendMailDto>(doc.RootElement.GetRawText());
     }
