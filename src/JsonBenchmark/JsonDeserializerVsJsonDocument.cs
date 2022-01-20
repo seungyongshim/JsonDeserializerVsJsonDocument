@@ -27,6 +27,14 @@ public class JsonDeserializerVsJsonDocument
     {
         var doc = JsonDocument.Parse(JsonText.AsMemory());
 
+        return JsonSerializer.Deserialize<SendMailDto>(doc.RootElement);
+    }
+
+    [Benchmark]
+    public SendMailDto JsonDocumenterRawText()
+    {
+        var doc = JsonDocument.Parse(JsonText.AsMemory());
+
         return JsonSerializer.Deserialize<SendMailDto>(doc.RootElement.GetRawText());
     }
 
