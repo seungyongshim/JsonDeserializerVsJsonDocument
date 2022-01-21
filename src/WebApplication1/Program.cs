@@ -25,14 +25,14 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapPost("/SendMail", (SendMailDto req) =>
+app.MapPost("/SendMail", async (SendMailDto req) =>
 {
     var text = JsonSerializer.Serialize(req);
 
     return Results.Ok(text);
 });
 
-app.MapPost("/SendMailDocument", (JsonDocument req) =>
+app.MapPost("/SendMailDocument", async (JsonDocument req) =>
 {
     var text = JsonSerializer.Serialize(req.RootElement);
 
@@ -42,7 +42,8 @@ app.MapPost("/SendMailDocument", (JsonDocument req) =>
 
 app.MapPost("/SendMailStream", async (HttpRequest req) =>
 {
-    return await JsonSerializer.DeserializeAsync<SendMailDto>(req.Body);
+    var text = await new StreamReader(req.Body).ReadToEndAsync();
+    return Results.Ok(text);
 }).Accepts<SendMailDto>("application/json");
 
 app.Run();
