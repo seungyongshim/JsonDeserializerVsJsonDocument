@@ -1,14 +1,14 @@
 using System.Text.Json;
 using BenchmarkDotNet.Attributes;
 using Flurl.Http;
+
 using JsonBenchmark.Properties;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 
-public class WebApplication1Factory : WebApplicationFactory<WebApplication1.Program>
-{
-}
+namespace JsonBenchmark;
 
+[MemoryDiagnoser]
 [HtmlExporter]
 public class JsonDeserializerVsJsonDocument
 {
