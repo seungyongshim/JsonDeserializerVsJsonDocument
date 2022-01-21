@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 namespace JsonBenchmark;
 
 [MemoryDiagnoser]
+[ThreadingDiagnoser]
 [HtmlExporter]
 public class JsonDeserializerVsJsonDocument
 {
