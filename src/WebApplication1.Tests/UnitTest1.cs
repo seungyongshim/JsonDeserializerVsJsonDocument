@@ -26,7 +26,7 @@ namespace WebApplication1.Tests
 
             var cli = new FlurlClient(client);
 
-            var ret = await cli.Request("/SendMail")
+            var ret = await cli.Request("/SendMailStream")
                                .WithHeader("content-type", "application/json; charset=utf-8")
                                .PostStringAsync(Resources.Test);
         }

@@ -46,4 +46,16 @@ public class JsonDeserializerVsJsonDocument
 
         return ret.ResponseMessage;
     }
+
+    [Benchmark()]
+    public async Task<HttpResponseMessage> StreamNonDeserializer()
+    {
+        var cli = new FlurlClient(TestClient);
+
+        var ret = await cli.Request("/SendMailStream")
+                           .WithHeader("content-type", "application/json; charset=utf-8")
+                           .PostStringAsync(Resources.Test);
+
+        return ret.ResponseMessage;
+    }
 }
