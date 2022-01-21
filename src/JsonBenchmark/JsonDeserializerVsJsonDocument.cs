@@ -1,96 +1,49 @@
 using System.Text.Json;
 using BenchmarkDotNet.Attributes;
-using JsonBenchmark;
+using Flurl.Http;
 using JsonBenchmark.Properties;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Testing;
+
+public class WebApplication1Factory : WebApplicationFactory<WebApplication1.Program>
+{
+}
 
 [HtmlExporter]
 public class JsonDeserializerVsJsonDocument
 {
     public string JsonText { get; private set; }
-    public NJsonSchema.JsonSchema NSchema { get; private set; }
-    public Json.Schema.JsonSchema DtoSchema { get; private set; }
-    public MemoryStream MemoryStream { get; private set; }
+    public HttpClient TestClient { get; private set; }
 
     [GlobalSetup]
     public void Setuo()
     {
         JsonText = Resources.Test;
 
-        NSchema = NJsonSchema.JsonSchema.FromType<SendMailDto>();
-
-        var jsonSchema = NJsonSchema.JsonSchema.FromType<SendMailDto>().ToJson();
-
-        DtoSchema = Json.Schema.JsonSchema.FromText(jsonSchema);
-    }
-
-    [Benchmark]
-    public SendMailDto RawText() => JsonSerializer.Deserialize<SendMailDto>(JsonText);
-
-    [Benchmark]
-    public SendMailDto RawTextValidate()
-    {
-        NSchema.Validate(JsonText);
-        return JsonSerializer.Deserialize<SendMailDto>(JsonText);
-    }
-
-
-    [Benchmark]
-    public SendMailDto JsonDocumenter()
-    {
-        var doc = JsonDocument.Parse(JsonText.AsMemory());
-
-        return JsonSerializer.Deserialize<SendMailDto>(doc.RootElement);
-    }
-
-    [Benchmark]
-    public SendMailDto JsonDocumenterValidate()
-    {
-        var doc = JsonDocument.Parse(JsonText.AsMemory());
-
-        DtoSchema.Validate(doc.RootElement);
-
-        return JsonSerializer.Deserialize<SendMailDto>(doc.RootElement);
-    }
-
-
-
-    [Benchmark]
-    public SendMailDto JsonDocumenterRawText()
-    {
-        var doc = JsonDocument.Parse(JsonText.AsMemory());
-
-        return JsonSerializer.Deserialize<SendMailDto>(doc.RootElement.GetRawText());
-    }
-
-    [Benchmark]
-    public SendMailDto JsonDocumenterRawTextValidate()
-    {
-        var doc = JsonDocument.Parse(JsonText.AsMemory());
-
-        DtoSchema.Validate(doc.RootElement);
-
-        return JsonSerializer.Deserialize<SendMailDto>(doc.RootElement.GetRawText());
+        TestClient = new WebApplication1Factory().CreateClient();
     }
 
     [Benchmark(Baseline = true)]
-    public SendMailDto JsonDeserializer()
+    public async Task<HttpResponseMessage> SystemTextJsonDeserializer()
     {
-        var dto = JsonSerializer.Deserialize<SendMailDto>(JsonText);
-        var text = JsonSerializer.Serialize(dto);
+        var cli = new FlurlClient(TestClient);
 
-        return JsonSerializer.Deserialize<SendMailDto>(text);
+        var ret = await cli.Request("/SendMail")
+                           .WithHeader("content-type", "application/json; charset=utf-8")
+                           .PostStringAsync(Resources.Test);
+
+        return ret.ResponseMessage;
     }
 
-    [Benchmark]
-    public SendMailDto JsonDeserializerValidate()
+    [Benchmark()]
+    public async Task<HttpResponseMessage> JsonDocumentNonDeserializer()
     {
-        NSchema.Validate(JsonText);
+        var cli = new FlurlClient(TestClient);
 
-        var dto = JsonSerializer.Deserialize<SendMailDto>(JsonText);
-        var text = JsonSerializer.Serialize(dto);
+        var ret = await cli.Request("/SendMailDocument")
+                           .WithHeader("content-type", "application/json; charset=utf-8")
+                           .PostStringAsync(Resources.Test);
 
-        return JsonSerializer.Deserialize<SendMailDto>(text);
+        return ret.ResponseMessage;
     }
-
-
 }

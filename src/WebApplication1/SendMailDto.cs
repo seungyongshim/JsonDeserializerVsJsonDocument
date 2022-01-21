@@ -1,5 +1,4 @@
-
-namespace JsonBenchmark;
+namespace WebApplication1;
 
 public record SendMailDto(MailAddress From,
                           IReadOnlyCollection<MailAddress>? To,
@@ -10,3 +9,5 @@ public record SendMailDto(MailAddress From,
 public record MailAddress(string Name, string Address);
 
 public record Attachment(string Id, byte[] Data);
+
+public partial class Program { }
