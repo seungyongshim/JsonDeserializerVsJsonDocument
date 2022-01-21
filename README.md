@@ -1,12 +1,14 @@
 ![CI](../../workflows/CI/badge.svg)
 
-|                        Method |      Mean |     Error |    StdDev | Ratio | RatioSD |
-|------------------------------ |----------:|----------:|----------:|------:|--------:|
-|                       RawText |  2.043 ms | 0.0737 ms | 0.2174 ms |  0.38 |    0.05 |
-|               RawTextValidate | 20.451 ms | 0.4056 ms | 0.6664 ms |  3.89 |    0.36 |
-|                JsonDocumenter |  2.374 ms | 0.0507 ms | 0.1486 ms |  0.44 |    0.04 |
-|        JsonDocumenterValidate |  2.818 ms | 0.0558 ms | 0.1101 ms |  0.53 |    0.04 |
-|         JsonDocumenterRawText |  4.540 ms | 0.1185 ms | 0.3437 ms |  0.84 |    0.09 |
-| JsonDocumenterRawTextValidate |  4.550 ms | 0.1094 ms | 0.3208 ms |  0.84 |    0.08 |
-|              JsonDeserializer |  5.473 ms | 0.1246 ms | 0.3675 ms |  1.00 |    0.00 |
-|      JsonDeserializerValidate | 24.514 ms | 0.4748 ms | 0.7107 ms |  4.65 |    0.49 |
+BenchmarkDotNet=v0.13.1, OS=ubuntu 18.04
+Intel Xeon Platinum 8272CL CPU 2.60GHz, 1 CPU, 2 logical and 2 physical cores
+.NET SDK=6.0.101
+  [Host]     : .NET 6.0.1 (6.0.121.56705), X64 RyuJIT
+  DefaultJob : .NET 6.0.1 (6.0.121.56705), X64 RyuJIT
+
+
+|                      Method |      Mean |     Error |    StdDev | Ratio | RatioSD | Completed Work Items | Lock Contentions |    Gen 0 |    Gen 1 |    Gen 2 | Allocated |
+|---------------------------- |----------:|----------:|----------:|------:|--------:|---------------------:|-----------------:|---------:|---------:|---------:|----------:|
+|  SystemTextJsonDeserializer | 11.478 ms | 0.1292 ms | 0.1209 ms |  1.00 |    0.00 |              28.7031 |           0.5781 |  78.1250 |  31.2500 |  15.6250 |     12 MB |
+| JsonDocumentNonDeserializer | 14.790 ms | 0.2803 ms | 0.3000 ms |  1.29 |    0.03 |              26.6250 |           0.7813 |  78.1250 |  31.2500 |        - |     13 MB |
+|       StreamNonDeserializer |  6.141 ms | 0.1221 ms | 0.2264 ms |  0.55 |    0.02 |              30.4453 |           0.6797 | 304.6875 | 273.4375 | 226.5625 |      9 MB |
