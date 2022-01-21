@@ -42,10 +42,7 @@ app.MapPost("/SendMailDocument", (JsonDocument req) =>
 
 app.MapPost("/SendMailStream", async (HttpRequest req) =>
 {
-    using var sr = new StreamReader(req.Body);
-    var text = await sr.ReadToEndAsync();
-
-    return Results.Ok(text);
+    return await JsonSerializer.DeserializeAsync<SendMailDto>(req.Body);
 }).Accepts<SendMailDto>("application/json");
 
 app.Run();
